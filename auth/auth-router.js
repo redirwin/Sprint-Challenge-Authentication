@@ -2,6 +2,8 @@ const router = require("express").Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
+const secrets = require("../config/secrets.js");
+
 const Users = require("../users/users-model.js");
 
 router.post("/register", (req, res) => {
@@ -29,6 +31,7 @@ router.post("/register", (req, res) => {
 router.post("/login", (req, res) => {
   // implement login
   if (req.body.username && req.body.password) {
+    let { username, password } = req.body;
     Users.findBy({ username })
       .first()
       .then(user => {
@@ -52,7 +55,7 @@ function createToken(user) {
   const options = {
     expiresIn: "24h"
   };
-  return jwt.sign(payload, secret, options);
+  return jwt.sign(payload, secrets.jwtSecretrs, options);
 }
 
 module.exports = router;
