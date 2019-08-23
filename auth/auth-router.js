@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 const Users = require("../users/users-model.js");
 
@@ -16,11 +17,9 @@ router.post("/register", (req, res) => {
         res.status(201).json(newUser);
       })
       .catch(err => {
-        res
-          .status(500)
-          .json({
-            message: "There was an error while trying to add that user."
-          });
+        res.status(500).json({
+          message: "There was an error while trying to add that user."
+        });
       });
   } else {
     res.status(400).json({ message: "Please enter a username and password." });
@@ -44,5 +43,16 @@ router.post("/login", (req, res) => {
     res.status(400).json({ message: "Please enter a username and password." });
   }
 });
+
+function createToken(user) {
+  const payload = {
+    subject: user.id,
+    username: user.username
+  };
+  const options = {
+    expiresIn: "24h"
+  };
+  return jwt.sign(payload, secret, options);
+}
 
 module.exports = router;
