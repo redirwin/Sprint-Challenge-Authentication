@@ -31,7 +31,7 @@ export default function Login(props) {
               <input
                 type="text"
                 name="username"
-                placeholder="Your username"
+                placeholder="username"
                 value={user.username}
                 onChange={handleChange}
                 required
@@ -42,15 +42,17 @@ export default function Login(props) {
               <input
                 type="password"
                 name="password"
-                placeholder="Your password"
+                placeholder="password"
                 value={user.password}
                 onChange={handleChange}
                 required
               />
             </label>
             </form>
-          <button onClick={handleLogin}>Log In</button> or 
-          <button onClick={handleSignup}>Sign Up</button>
+            <buttons>
+            <button onClick={handleLogin}>Log In</button><span>or</span> 
+            <button onClick={handleSignup}>Sign Up</button>
+            </buttons>
         </LoginWrapper>
       );
     }
@@ -82,6 +84,9 @@ export default function Login(props) {
       }
       button {
         padding: 0.5rem;
+        width: 5rem;
+        margin: 0 1rem;
+        /* display: inline; */
       }
     `;
     
