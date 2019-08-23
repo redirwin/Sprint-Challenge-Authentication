@@ -16,7 +16,11 @@ router.post("/register", (req, res) => {
         res.status(201).json(newUser);
       })
       .catch(err => {
-        res.status(500).json(err);
+        res
+          .status(500)
+          .json({
+            message: "There was an error while trying to add that user."
+          });
       });
   } else {
     res.status(400).json({ message: "Please enter a username and password." });
@@ -25,6 +29,20 @@ router.post("/register", (req, res) => {
 
 router.post("/login", (req, res) => {
   // implement login
+  if (req.body.username && req.body.password) {
+    Users.findBy({ username })
+      .first()
+      .then(user => {
+        if (user && bcrypt.compareSync(password, user.password)) {
+          const token = createToken(user);
+          res.status(200).json({ message: `Welcome, ${user.username}` });
+        } else {
+          res.status(401).json({ message: "Those credentials aren't valid." });
+        }
+      });
+  } else {
+    res.status(400).json({ message: "Please enter a username and password." });
+  }
 });
 
 module.exports = router;
